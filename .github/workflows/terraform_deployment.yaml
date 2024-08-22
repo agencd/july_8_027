@@ -44,6 +44,9 @@ jobs:
 
       - name: Run Terraform Plan
         run: terraform plan
+      
+      - name: Run Terraform Apply 
+        run: terraform apply
 
       # 1 Install terraform - COMPLETE
       # 2 TERRAFORM LOGIN | copy a token and paste on our machine - COMPLETE
