@@ -1,5 +1,8 @@
 resource "aws_vpc" "my_vpc" {
   cidr_block = var.vpc_cidr_block
+  # cidr_block = $vpc_cidr_block
+  # cidr_block = ${{ secrets.vpc_cidr_block }} sensitive
+  # cidr_block = ${{ var.vpc_cidr_block }} nonsensitive
   tags       = var.tag
 }
 
