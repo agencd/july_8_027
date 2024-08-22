@@ -18,6 +18,7 @@ on:
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.SECRET_PRIME }} # this is just a sensitive value bleongs to your repo
   AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
+  AWS_REGION: us-east-1
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
