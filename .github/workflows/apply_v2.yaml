@@ -8,8 +8,8 @@ on:
       run_apply:
         description: Select this only if you want to run terraform apply 
         type: boolean
-        required: false
         default: false
+        required: false
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.SECRET_PRIME }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
@@ -37,4 +37,4 @@ jobs:
 
       - name: Run Terraform Apply 
         run: terraform apply -auto-approve
-        if: ${{ github.event.inputs.run_apply }}
+        if: ${{ github.event.inputs.run_apply == 'true' }}
