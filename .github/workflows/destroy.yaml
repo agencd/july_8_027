@@ -1,0 +1,32 @@
+name: Terraform Destroy
+
+on:
+  workflow_dispatch:
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.SECRET_PRIME }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
+  AWS_REGION: us-east-1
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: My First Terraform Setup
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.MY_TERRAFORM_LOGIN_TOKEN }}
+      
+      - name: Run Terraform Init
+        run: terraform init
+
+      - name: Check Terraform Format
+        run: terraform fmt -check -recursive
+
+      - name: Run Terraform Plan Destroy
+        run: terraform plan -destroy
+      
+      - name: Run Terraform Destroy 
+        run: terraform destroy -auto-approve
