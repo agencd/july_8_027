@@ -14,9 +14,10 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
   AWS_REGION: us-east-1
 
+######################################################################################################### if: ${{ github.event.inputs.run_destroy == 'false' || github.ref == 'refs/heads/main' }}
 jobs:
   terraform:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.event.inputs.run_apply_or_destroy != 'destroy' || github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
