@@ -1,8 +1,8 @@
 name: Terraform Jobs
 
 on:
-  push:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ]
   workflow_dispatch:
     inputs:
       run_apply_or_destroy:
@@ -14,7 +14,6 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
   AWS_REGION: us-east-1
 
-######################################################################################################### if: ${{ github.event.inputs.run_destroy == 'false' || github.ref == 'refs/heads/main' }}
 jobs:
   terraform:
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event.inputs.run_apply_or_destroy != 'destroy' }}
@@ -39,6 +38,7 @@ jobs:
       - name: Run Terraform Apply 
         run: terraform apply -auto-approve
         if: ${{ github.event.inputs.run_apply_or_destroy == 'apply' }}
+  
   terraform_destroy:
     if: ${{ github.event.inputs.run_apply_or_destroy == 'destroy' }}
     runs-on: ubuntu-latest
