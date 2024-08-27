@@ -17,7 +17,7 @@ env:
 ######################################################################################################### if: ${{ github.event.inputs.run_destroy == 'false' || github.ref == 'refs/heads/main' }}
 jobs:
   terraform:
-    if: ${{ github.event.inputs.run_apply_or_destroy != 'destroy' || github.ref == 'refs/heads/main' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event.inputs.run_apply_or_destroy != 'destroy' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
