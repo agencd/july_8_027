@@ -1,4 +1,4 @@
-name: Terraform Apply v2
+name: Terraform Jobs
 
 on:
   push:
@@ -22,6 +22,7 @@ env:
 
 jobs:
   terraform:
+    if: ${{ github.event.inputs.run_destroy == 'false' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
