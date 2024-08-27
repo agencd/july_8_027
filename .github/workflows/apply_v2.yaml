@@ -6,7 +6,12 @@ on:
   workflow_dispatch:
     inputs:
       run_apply:
-        description: Select this only if you want to run terraform apply 
+        description: Run Terraform Apply ?
+        type: boolean
+        default: false
+        required: false
+      run_destroy:
+        description: Run Terraform Destroy ?
         type: boolean
         default: false
         required: false
@@ -38,3 +43,25 @@ jobs:
       - name: Run Terraform Apply 
         run: terraform apply -auto-approve
         if: ${{ github.event.inputs.run_apply == 'true' }}
+  terraform_destroy:
+    if: ${{ github.event.inputs.run_destroy == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: My First Terraform Setup
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.MY_TERRAFORM_LOGIN_TOKEN }}
+      
+      - name: Run Terraform Init
+        run: terraform init
+
+      - name: Check Terraform Format
+        run: terraform fmt -check -recursive
+
+      - name: Run Terraform Plan
+        run: terraform plan -destroy
+
+      - name: Run Terraform Destroy 
+        run: terraform destroy -auto-approve
