@@ -5,16 +5,10 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
     inputs:
-      run_apply:
-        description: Run Terraform Apply ?
-        type: boolean
-        default: false
-        required: false
-      run_destroy:
-        description: Run Terraform Destroy ?
-        type: boolean
-        default: false
-        required: false
+      run_apply_or_destroy:
+        description: Run Terraform Apply or Destroy ?
+        type: string
+        required: true
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.SECRET_PRIME }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
@@ -22,7 +16,7 @@ env:
 
 jobs:
   terraform:
-    if: ${{ github.event.inputs.run_destroy == 'false' || github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,9 +37,9 @@ jobs:
 
       - name: Run Terraform Apply 
         run: terraform apply -auto-approve
-        if: ${{ github.event.inputs.run_apply == 'true' }}
+        if: ${{ github.event.inputs.run_apply_or_destroy == 'apply' }}
   terraform_destroy:
-    if: ${{ github.event.inputs.run_destroy == 'true' }}
+    if: ${{ github.event.inputs.run_apply_or_destroy == 'destroy' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
