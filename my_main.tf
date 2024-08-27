@@ -16,8 +16,8 @@ terraform {
 provider "aws" {}
 
 module "my_vpc" {
-  source                = "./modules/vpc"
-  vpc_cidr_block      = "172.15.0.0/16"
+  source         = "./modules/vpc"
+  vpc_cidr_block = "172.15.0.0/16"
   tag = {
     Name = "modules_vpc"
   }
@@ -27,7 +27,7 @@ module "remote_module" {
   # source = terraform-aws-security-groups-027
   source  = "app.terraform.io/027-spring-cloud/security-groups-027/aws"
   version = "1.0.0"
-  vpc_id       = module.my_vpc.my_vpc_id
+  vpc_id  = module.my_vpc.my_vpc_id
 
   security_groups = {
     "web" = {
