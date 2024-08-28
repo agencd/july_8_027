@@ -8,7 +8,7 @@ on:
       run_apply_or_destroy:
         description: Run Terraform Apply or Destroy ?
         type: string
-        required: true
+        required: false
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.SECRET_PRIME }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
@@ -16,7 +16,7 @@ env:
 
 jobs:
   terraform:
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event.inputs.run_apply_or_destroy != 'destroy' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,29 +35,6 @@ jobs:
       - name: Run Terraform Plan
         run: terraform plan
 
-      - name: Run Terraform Apply 
-        run: terraform apply -auto-approve
-        if: ${{ github.event.inputs.run_apply_or_destroy == 'apply' }}
-  
-  terraform_destroy:
-    if: ${{ github.event.inputs.run_apply_or_destroy == 'destroy' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: My First Terraform Setup
-        uses: hashicorp/setup-terraform@v2
-        with:
-          cli_config_credentials_token: ${{ secrets.MY_TERRAFORM_LOGIN_TOKEN }}
-      
-      - name: Run Terraform Init
-        run: terraform init
-
-      - name: Check Terraform Format
-        run: terraform fmt -check -recursive
-
-      - name: Run Terraform Plan
-        run: terraform plan -destroy
-
-      - name: Run Terraform Destroy 
-        run: terraform destroy -auto-approve
+      - name: Run Terraform Deployment 
+        run: terraform ${{ github.event.inputs.run_apply_or_destroy }} -auto-approve
+        if: ${{ github.event.inputs.run_apply_or_destroy == 'apply' || github.event.inputs.run_apply_or_destroy == 'destroy' }}
