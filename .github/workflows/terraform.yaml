@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
     inputs:
-      run_apply_or_destroy:
+      action:
         description: Run Terraform Apply or Destroy ?
         type: string
         required: false
@@ -16,7 +16,6 @@ env:
 
 jobs:
   terraform:
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,5 +35,5 @@ jobs:
         run: terraform plan
 
       - name: Run Terraform Deployment 
-        run: terraform ${{ github.event.inputs.run_apply_or_destroy }} -auto-approve
-        if: ${{ github.event.inputs.run_apply_or_destroy == 'apply' || github.event.inputs.run_apply_or_destroy == 'destroy' }}
+        run: terraform ${{ github.event.inputs.action }} -auto-approve
+        if: ${{ github.event.inputs.action == 'apply' || github.event.inputs.action == 'destroy' }}
